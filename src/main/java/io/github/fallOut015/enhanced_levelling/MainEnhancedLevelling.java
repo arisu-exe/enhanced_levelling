@@ -1,9 +1,13 @@
 package io.github.fallOut015.enhanced_levelling;
 
+import io.github.fallOut015.enhanced_levelling.client.gui.screen.PlayerUpgradesScreen;
 import io.github.fallOut015.enhanced_levelling.common.capabilities.CapabilitiesEnhancedLevelling;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -48,6 +52,12 @@ public class MainEnhancedLevelling {
         @SubscribeEvent
         public static void onAttachCapabilities(final AttachCapabilitiesEvent<Entity> event) {
             CapabilitiesEnhancedLevelling.onAttachCapabilities(event);
+        }
+        @SubscribeEvent
+        public static void onLevelChange(final PlayerXpEvent.LevelChange playerXpEvent$LevelChange) {
+            if(playerXpEvent$LevelChange.getPlayer() instanceof ClientPlayerEntity) {
+                Minecraft.getInstance().setScreen(new PlayerUpgradesScreen((ClientPlayerEntity) playerXpEvent$LevelChange.getPlayer()));
+            }
         }
     }
 }

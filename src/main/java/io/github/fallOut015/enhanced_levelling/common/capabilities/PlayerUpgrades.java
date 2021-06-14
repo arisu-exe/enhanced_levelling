@@ -1,45 +1,25 @@
 package io.github.fallOut015.enhanced_levelling.common.capabilities;
 
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import javax.management.Attribute;
+
 public class PlayerUpgrades implements IPlayerUpgrades {
-    int upgradePoints = 0; // upgradePoints that increase whenever you level up.
+    int upgradePoints;
 
-    double health = 0; // bonus health in half hearts.
-    double hunger = 0; // bonus hunger in half shanks.
-    double armor = 0; // bonus armor in half plates.
-    double breathing = 0; // bonus breathing in half bubbles.
+    final UpgradeableAttribute health;
+    final UpgradeableAttribute hunger;
+    final UpgradeableAttribute armor;
+    final UpgradeableAttribute breathing;
 
-    @Override
-    public void setHunger(double hunger) {
-        this.hunger = hunger;
-    }
-    @Override
-    public void setHealth(double health) {
-        this.health = health;
-    }
-    @Override
-    public void setBreathing(double breathing) {
-        this.breathing = breathing;
-    }
-    @Override
-    public void setArmor(double armor) {
-        this.armor = armor;
-    }
+    PlayerUpgrades() {
+        this.upgradePoints = 0;
 
-    @Override
-    public double getHunger() {
-        return this.hunger;
-    }
-    @Override
-    public double getHealth() {
-        return this.health;
-    }
-    @Override
-    public double getBreathing() {
-        return this.breathing;
-    }
-    @Override
-    public double getArmor() {
-        return this.armor;
+        this.health = new UpgradeableAttribute(Attributes.MAX_HEALTH, 0, 167);
+        this.hunger = new UpgradeableAttribute(null, 0, 167);
+        this.armor = new UpgradeableAttribute(Attributes.ARMOR, 38, 167);
+        this.breathing = new UpgradeableAttribute(null, 38, 167);
     }
 
     @Override
@@ -49,5 +29,29 @@ public class PlayerUpgrades implements IPlayerUpgrades {
     @Override
     public void setUpgradePoints(int upgradePoints) {
         this.upgradePoints = upgradePoints;
+    }
+
+    public final UpgradeableAttribute getHealth() {
+        return this.health;
+    }
+    public final UpgradeableAttribute getHunger() {
+        return this.hunger;
+    }
+    public final UpgradeableAttribute getArmor() {
+        return this.armor;
+    }
+    public final UpgradeableAttribute getBreathing() {
+        return this.breathing;
+    }
+
+    public String serialize() {
+        return this.health.serialize() + ";" + this.hunger.serialize() + ";" + this.armor.serialize() + ";" + this.breathing.serialize();
+    }
+    public void deserialize(String serialized) {
+        String[] data = serialized.split(";");
+        this.health.deserialize(data[0]);
+        this.hunger.deserialize(data[1]);
+        this.armor.deserialize(data[2]);
+        this.breathing.deserialize(data[3]);
     }
 }
